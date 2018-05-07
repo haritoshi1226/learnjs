@@ -16,9 +16,10 @@ describe('LearnJS', function() {
     });
 
     describe('problem view', function(){
-       // it('has a title that includes the problem number', function(){
-       //     expect(view.find('.title').text()).toEqual('Problem #1');
-       // });
+       it('has a title that includes the problem number', function(){
+           var view = learnjs.problemView('1');
+           expect(view.find('.title').text()).toEqual('Problem #1');
+       });
 
        it('invokes the router when loaded', function(){
            spyOn(learnjs, 'showView');
@@ -33,18 +34,30 @@ describe('LearnJS', function() {
            expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
        });
 
-       // it('shows the description', function(){
-       //     var view = $('.templates .problem-view').clone();
-       //     expect(view.find('[data-name="description"]').text()).toEqual('What is truth?');
-       // });
-       //
-       // it('shows the problem code', function(){
-       //     var view = $('.templates .problem-view').clone();
-       //     expect(view.find('[data-name="code"]').text()).toEqual('function problem() { return __;}');
-       // })
+       it('shows the description', function(){
+           var view = learnjs.problemView('1');
+           expect(view.find('[data-name="description"]').text()).toEqual('What is truth?');
+       });
 
+       it('shows the problem code', function(){
+           var view = learnjs.problemView('1');
+           expect(view.find('[data-name="code"]').text()).toEqual('function problem() { return __; }');
+       });
+
+        describe('answer section', function() {
+            it('can check a correct answer by hitting a button', function () {
+                var problemData = learnjs.problems[0];
+                expect(learnjs.checkAnswer(problemData,'true')).toEqual(true);
+            });
+
+            it('rejects an incorrect answer', function(){
+                var view = learnjs.problemView('1');
+                view.find('.answer').val('false');
+                view.find('.check-btn').click();
+                expect(view.find('.result').text()).toEqual('Incorrect!');
+            });
+        });
     });
-
 });
 
     
